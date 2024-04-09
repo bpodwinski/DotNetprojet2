@@ -39,6 +39,21 @@ namespace P2FixAnAppDotNetCode.Models.Repositories
         }
 
         /// <summary>
+        /// Get a product from the inventory by its id
+        /// </summary>
+        public Product GetProductById(int id)
+        {
+            foreach (var product in _products)
+            {
+                if (product.Id == id)
+                {
+                    return product;
+                }
+            }
+            return null;
+        }
+
+        /// <summary>
         /// Update the stock of a product in the inventory by its id
         /// </summary>
         public void UpdateProductStocks(int productId, int quantityToRemove)

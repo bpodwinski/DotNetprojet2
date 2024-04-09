@@ -6,6 +6,7 @@ namespace P2FixAnAppDotNetCode.Models.Repositories
     {
         List<Product> GetAllProducts();
 
+        Product GetProductById(int id);
 
         void UpdateProductStocks(int productId, int quantityToRemove);
     }
