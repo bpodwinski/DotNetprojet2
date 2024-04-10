@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace P2FixAnAppDotNetCode.Models
@@ -8,10 +9,12 @@ namespace P2FixAnAppDotNetCode.Models
     /// </summary>
     public class Cart : ICart
     {
+        private readonly List<CartLine> _cartLines = new List<CartLine>();
+
         /// <summary>
         /// Read-only property for display only
         /// </summary>
-        public IEnumerable<CartLine> Lines => GetCartLineList();
+        public IEnumerable<CartLine> Lines => _cartLines.AsReadOnly();
 
         /// <summary>
         /// Return the actual cartline list
@@ -27,41 +30,53 @@ namespace P2FixAnAppDotNetCode.Models
         /// </summary>//
         public void AddItem(Product product, int quantity)
         {
-            // TODO implement the method
+            // TODO implement the method (finish)
+            CartLine cartLine = _cartLines.FirstOrDefault(cl => cl.Product.Id == product.Id);
+
+            if (cartLine != null)
+            {
+                cartLine.Quantity += quantity;
+            }
+            else
+            {
+                _cartLines.Add(new CartLine
+                {
+                    Product = product,
+                    Quantity = quantity
+                });
+            }
         }
 
         /// <summary>
         /// Removes a product form the cart
         /// </summary>
         public void RemoveLine(Product product) =>
-            GetCartLineList().RemoveAll(l => l.Product.Id == product.Id);
+            _cartLines.RemoveAll(l => l.Product.Id == product.Id);
 
         /// <summary>
         /// Get total value of a cart
         /// </summary>
-        public double GetTotalValue()
-        {
-            // TODO implement the method
-            return 0.0;
-        }
+
+        // TODO implement the method (finish)
+        public double GetTotalValue() => _cartLines.Sum(l => l.Product.Price * l.Quantity);
 
         /// <summary>
         /// Get average value of a cart
         /// </summary>
         public double GetAverageValue()
         {
-            // TODO implement the method
-            return 0.0;
+            // TODO implement the method (finish)
+            if (_cartLines.Count == 0) return 0;
+
+            return GetTotalValue() / _cartLines.Sum(l => l.Quantity);
         }
 
         /// <summary>
         /// Looks after a given product in the cart and returns if it finds it
         /// </summary>
-        public Product FindProductInCartLines(int productId)
-        {
-            // TODO implement the method
-            return null;
-        }
+
+        // TODO implement the method (finish)
+        public Product FindProductInCartLines(int productId) =>_cartLines.FirstOrDefault(l => l.Product.Id == productId)?.Product;
 
         /// <summary>
         /// Get a specific cartline by its index
